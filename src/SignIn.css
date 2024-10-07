@@ -1,0 +1,98 @@
+img {
+    width: 50%;
+    height: 5%;
+    padding-left: 25%;
+    padding-bottom: 15%;
+}
+
+/* Form Styling */
+.signIn-container {
+    justify-content: center; 
+    background-color: white;
+    padding: 2% 8%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    display: block;
+}
+
+h2 {
+    color: #410e58;
+    margin-bottom: 2%;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 3%;
+}
+
+input {
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 4%;
+    width: 100%;
+    font-size: medium;
+    margin-bottom: 3%;
+}
+
+input::placeholder {
+    color: #ccc;
+    font-size: medium;
+}
+
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button.submit-btn {
+    width:87%;
+    padding: 3%;
+    font-size: medium;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.forgot-pw {
+    display: block;
+    margin-bottom: 5%;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.forgot-pw:hover {
+    text-decoration: underline;
+    color:#22538b;
+}
+
+.reg-btn {
+    margin-top: 5%;
+    display: block;
+    margin-bottom: 5%;
+    background-color: #5B4778;
+    color: white;
+    width: 87%;
+    font-size: medium;
+    padding: 3%;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.reg-btn:hover {
+    background-color: #410e58; 
+}
+
+p {
+    margin-top: 10%;
+    font-size: 0.9rem;
+}
