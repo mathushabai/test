@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from './firebase'; 
 import { collection, addDoc } from "firebase/firestore"
-import './SignUp.css'; 
+import '../css/SignUp.css'; 
 
 const SignUp = ({ onSignUpSuccess }) => {
   const [email, setEmail] = useState("");

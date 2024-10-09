@@ -1,73 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { auth } from './js/firebase';
 import './App.css';
-import SignIn from "./SignIn";
-import CustomerSignUp from "./SignUp";
-import ServiceProviderSignUp from "./SP_SignUp";
-import CustHome from "./CustHome";
-import ServiceList from "./ServiceList";
-import Header from "./Header";
+
+import Navbar from './js/Navbar';
+import CustHome from './js/CustHome';
+import ServiceList from './js/ServiceList';
+//import BookingPage from './BookingPage';
+import Dashboard from './js/Dashboard';
+import SignIn from './SignIn';
+import SignUp from './js/SignUp';
+//import NotFoundPage from './NotFoundPage';
 
 function App() {
-  const [page, setPage] = useState("home");
-  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-      setPage("home");
-    }
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsAuthenticated(!!user); // Set authentication state based on Firebase user session
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
   }, []);
 
-  const handleSignIn = (email, password) => {
-    const userData = { email }; // Add more fields if necessary
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    //setPage("home");
-  };
-
-  const handleSignOut = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    //setPage("signin");
-  };
-
-  const handleCategoryClick = (route) => {
-    setPage(route); // Set page to the category
-  };
-
-  // Optional: Handle navigation to settings (if needed)
-  const handleSettingsClick = () => {
-    setPage("settings");
-  };
-
   return (
-    <div className="App">
-      {/* Conditionally show header for all pages except service provider dashboard */}
-      {page !== "serviceprovider_dashboard" && <Header />}
-
-      {!user && page === "signin" && <SignIn onSignIn={handleSignIn} />}
-      {page === "signup" && <CustomerSignUp onSignUp={() => setPage("signin")} />}
-      {page === "serviceprovider_signup" && (
-        <ServiceProviderSignUp onSignUp={() => setPage("signin")} />
-      )}
-
-      {/* Customer Home Page */}
-        <CustHome
-          onCategoryClick={handleCategoryClick}
-          onSettingsClick={handleSettingsClick}
-          onSignOut={handleSignOut}
-        />
-
-      {/* Display service providers based on selected category */}
-      {page === "/hairdressing" && <ServiceList category="Hairdressing" />}
-      {page === "/massages" && <ServiceList category="Massages" />}
-      {page === "/car-washes" && <ServiceList category="Car Washes" />}
-
-      {/* Settings Page (optional) */}
-      {page === "settings" && <div>Settings Page (Under Construction)</div>}
-    </div>
-  );
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <CustHome /> : <Navigate to="/signin" />} />
+        <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/signup" element={<SignUp />} />
+        {isAuthenticated && (
+          <>
+            <Route path="/services" element={<ServiceList />} />
+            //<Route path="/dashboard" element={<Dashboard />} />
+          </>
+        )}
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
+      </Routes>
+    </Router>
+  );  
 }
 
 export default App;

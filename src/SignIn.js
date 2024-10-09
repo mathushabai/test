@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "./js/firebase";
 import './SignIn.css'; 
 
 function SignIn({ onSignIn, onSignUpClick }) {
@@ -22,13 +22,13 @@ function SignIn({ onSignIn, onSignUpClick }) {
   };
 
   return (
-    <div>
-      <img src="/app-logo-blue.png" alt="App Logo" />
+    <div className="bg">
+      <img className="imgSI" src="/app-logo-blue.png" alt="App Logo" />
       <div className="signIn-container">
         <h2>Sign In</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="SIform-group">
             <label>Email</label>
             <input
               type="email"
@@ -38,7 +38,7 @@ function SignIn({ onSignIn, onSignUpClick }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="SIform-group">
             <label>Password</label>
             <input
               type="password"
@@ -48,7 +48,7 @@ function SignIn({ onSignIn, onSignUpClick }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="SIform-group">
             <a href="#" className="forgot-pw">
               Forgot Password?
             </a>
@@ -56,7 +56,7 @@ function SignIn({ onSignIn, onSignUpClick }) {
           <button type="submit" className="submit-btn">Sign In</button>
         </form>
 
-        <div className="form-group">
+        <div className="SIform-group">
           <p>Don't have an account? Register below:</p>
           {/* Customer Sign Up button */}
           <button 

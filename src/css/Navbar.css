@@ -1,5 +1,5 @@
 /* Header styling */
-.home-header {
+.main-nav {
     position: top; 
     top: 0;
     left: 0;
@@ -11,6 +11,29 @@
     align-items: center;
     z-index: 1000;
 }
+
+.navbar-list {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Navbar Items */
+  .navbar-item a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+  }
+  
+  /* Hover Effect */
+  .navbar-item a:hover {
+    background-color: #575757;
+    border-radius: 4px;
+  }
 
 .home-header h1 {
     font-size: 1.5rem;
