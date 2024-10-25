@@ -1,0 +1,455 @@
+.bg {
+  overflow-y: scroll;
+}
+
+.imgSP {
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+  
+.SP_container {
+  background-color: white;
+  padding: 3% 4% 3% 4%;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 900px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.SP-header {
+  margin-top: 1%;
+  margin-bottom: 8%;
+  color: #304D30;
+}
+
+/* Label CSS */
+label, input {
+  -webkit-text-stroke: thin;
+}
+
+.Email-label {
+  text-align: start;
+  display: block;
+  margin-bottom: 3%;
+  width: 8%;
+}
+
+.Mb-label {
+  width: 140px;
+  margin-top: -3%;
+  margin-left: 2%;
+}
+
+.PW-label {
+  width: 80px;
+  margin: -2% 3% 0 0;
+}
+
+.PW2-label {
+  width: 180px;
+  margin: -1% 2% 1% 2%;
+}
+
+.BA-label {
+  text-align: start;
+  display: block;
+  margin: 1% 2% 3% 17%;
+  width: 18%;
+  font-weight: 600;
+}
+
+.BN-label {
+  text-align: start;
+  width: 140px;
+  margin-bottom: 2%;
+}
+
+.BH-label {
+  margin-block-end: auto;
+  text-align: start;
+  margin-bottom: 3%;
+  margin-top: 3%;
+  width: 45%;
+}
+
+.cat-label {
+  text-align: start;
+  align-self: start;
+  display: block;
+  padding: 0;
+  width: 20%;
+}
+
+.service-label {
+  text-align: start;
+  display: block;
+  width: 16%;
+}
+
+.Desc-label {
+  text-align: start;
+  margin: 2% 4% 3% 0;
+}
+
+/* Input CSS */
+.emailInput {
+  width: 320px;
+  padding: 8px;
+}
+
+.mobileInput {
+  width: 300px;
+  padding: 8px;
+  margin-left: 2%;
+}
+
+.pwInput {
+  width: 320px;
+  padding: 8px;
+}
+
+.bnInput {
+  width: 320px;
+  padding: 8px;
+  margin-left: 2%;
+}
+
+.SPform-group {
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+  margin-bottom: 3%;
+}
+
+.BHform-group {
+  display: grid;
+  align-items: center;
+  margin-bottom: 5%;
+}
+
+.BAInput {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  width: 550px;
+  margin-top: -3%;
+  font-size: medium;
+  margin-bottom: 2%;
+}
+
+.descriptionBox {
+  width: 70%;
+  height: 60px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: inherit;
+  border: 1px solid #ccc;
+  -webkit-text-stroke: thin; 
+  padding-top: 1%; 
+  padding-left: 1%; 
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  color: rgba(172, 172, 172, 0.651);
+  opacity: 1; 
+}
+
+textarea:focus {
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+.remotebox {
+  font-weight: 600;
+  width: 25%;
+}
+
+.service-checkbox {
+  margin-left: 6%;
+}
+
+.fa-circle-minus {
+  float: inline-end;
+}
+
+.remove-category-btn {
+  outline: none;
+  border: none;
+  color: red;
+  font-size: 1.5em;
+  float: inline-end;
+}
+
+.selected-cat-list {
+  margin-bottom: 10px;
+}
+
+.SI-group {
+  margin-top: 0;
+}
+
+.flatpickr-input {
+  padding: 2%;
+  width: 20%;
+}
+
+.hrsDisplay {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 50px;
+  -webkit-text-stroke: medium;
+}
+
+.setHrs {
+  border: 1px #ccc solid;
+  padding: 10px 20px;
+  background-color: #B6C4B6;
+  width: 15%;
+  border-radius: 5px;
+  -webkit-text-stroke: thin;
+}
+
+.setHrs:hover {
+  background-color: #52796F;
+}
+
+.fa-clock {
+  margin-right: 8%;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 5%;
+  justify-content: left;
+}
+
+.day-row label {
+  width: 15%; 
+  text-align: start;
+  font-weight: 800;
+}
+
+.day-row input[type="checkbox"] {
+  width: 20px;
+}
+
+.day-row .react-time-picker {
+  width: 200px;
+}
+
+.setHrs:hover {
+  cursor: pointer;
+}
+
+.business-hours-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-checkboxes {
+  display: grid;
+  text-align: start;
+}
+
+.success-message {
+  color: green;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+}
+
+.custom-category-wrapper {
+  display: flex;
+  gap: 30px; 
+  width: 450px;
+}
+
+.custom-category-input {
+  flex: 1; 
+  margin: 2% 2% 8% 2%;
+  width: 150px;
+}
+
+.add-category-btn {
+  height: 52px;
+  cursor: pointer;
+  background-color: #549283;
+  color: #fff;
+  margin-top: 2.5%;
+  width: 140px;
+  border-radius: 6px;
+  border-color: white;
+  font-size: inherit;
+}
+
+.add-category-btn:hover {
+  background-color: #52796F;
+}
+
+.selected-categories {
+  align-self: start;
+  width: 30%;
+}
+
+.service-input {
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 2%;
+  width: 100%;
+  margin-bottom: 2%;
+}
+
+.service-item {
+  display: inline-table;
+  width: 400px;
+  background-color: #EEF0E5;
+  padding: 2%;
+  margin-bottom: 5%;
+}
+
+.Servicelbl {
+  text-align: start;
+  margin-top: -3%;
+  display: block;
+  margin-right: 10%;
+  padding: 0;
+  width: 50%;
+}
+
+.currency {
+  margin-top: -3%;
+  margin-right: 2%;
+  margin: -3% 2% 0 5%;
+}
+
+.remove-btn {
+  background-color: none;
+  outline: none;
+  border: none;
+  color: red;
+  font-size: 1.8em;
+  margin-top: 5%;
+  margin-right: 20%;
+}
+
+.add-btn {
+  background-color: none;
+  outline: none;
+  border: none;
+  color: green;
+  font-size: 1.8em;
+  margin-top: 5%;
+}
+
+.remove-btn:hover , .add-btn:hover {
+  cursor: pointer;
+}
+
+.SP-sub {
+  width: 40%;
+  margin-top: 10px;
+  display: grid;
+  justify-self: center;
+  padding: 2%;
+  font-size: medium;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #84A98C;
+  color: white;
+}
+
+.SP-sub:hover {
+  background-color: #329147;
+}
+
+.signIn-text {
+  font-size: inherit;
+  margin-top: 4%;
+}
+
+.SPSI-btn {
+  width: 40%;
+  margin-top: 10px;
+  display: grid;
+  justify-self: center;
+  padding: 2%;
+  font-size: medium;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #52796F;
+  color: white;
+}
+
+.SPSI-btn:hover {
+  background-color: #304D30; 
+}
+
+.password-input {
+  position: relative;
+  width: 100%;
+}
+
+#password-feedback {
+  margin-top: 5px;
+  color: red;
+}
+
+#password-feedback.valid {
+  color: green;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  
+  /* Tooltip positioning */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position tooltip above the text */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.pw-text {
+  margin-top: -2%;
+  width: 420px;
+  text-align: left;
+  color: orange;
+  -webkit-text-stroke: thin;
+}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import '../css/Dashboard.css'; 
-import { db } from "./firebase"; 
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { doc, collection, getDocs, updateDoc, arrayUnion } from "firebase/firestore";
 
-function Dashboard() {
+function Dashboard({ onLogout }) {
+  //admin view & cancellation feature // payment
   
   const [activeSection, setActiveSection] = useState("bookings");
   const [bookings, setBookings] = useState([]); 
@@ -35,17 +36,31 @@ function Dashboard() {
   const handleAddService = async (e) => {
     e.preventDefault();
     try {
-      const serviceCollection = collection(db, "services"); 
-      await addDoc(serviceCollection, {
-        name: newService.name,
-        price: newService.price
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("No authenticated user");
+        return;
+      }
+      const uid = user.uid;
+      const serviceProviderDoc = doc(db, "serviceProviders", uid);
+      
+      // Add new service to the services subcollection
+      await updateDoc(serviceProviderDoc, {
+        services: arrayUnion({
+          name: newService.name,
+          price: newService.price,
+          duration: newService.duration,
+        })
       });
-      setServices([...services, { name: newService.name, price: newService.price }]); 
-      setNewService({ name: "", price: "" }); // Reset form fields
+
+      setServices([...services, { name: newService.name, price: newService.price, duration: newService.duration  }]);
+      setNewService({ name: "", price: "", duration: "" }); // Reset form fields
     } catch (error) {
       console.error("Error adding service: ", error);
     }
   };
+
 
   return (
     <div className="dashboard-container">
@@ -61,6 +76,9 @@ function Dashboard() {
           </li>
           <li className={activeSection === "settings" ? "active" : ""} onClick={() => setActiveSection("settings")}>
             Settings
+          </li>
+          <li onClick={onLogout} className="logout">
+            Logout
           </li>
         </ul>
       </nav>
@@ -100,30 +118,43 @@ function Dashboard() {
               ))}
             </ul>
 
-            {/* Add New Service */}
-            <h3>Add New Service</h3>
-            <form onSubmit={handleAddService}>
-              <div className="form-group">
-                <label>Service Name</label>
-                <input
-                  type="text"
-                  value={newService.name}
-                  onChange={(e) => setNewService({ ...newService, name: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Service Price</label>
-                <input
-                  type="number"
-                  value={newService.price}
-                  onChange={(e) => setNewService({ ...newService, price: e.target.value })}
-                  required
-                />
-              </div>
-              <button type="submit" className="add-service-btn">Add Service</button>
-            </form>
-          </div>
+          {/* Add New Service */}
+          <h3>Add New Service</h3>
+          <form onSubmit={handleAddService}>
+            <div className="form-group">
+              <label>Service Name</label>
+              <input
+                className="dash-input"
+                type="text"
+                value={newService.name}
+                onChange={(e) => setNewService({ ...newService, name: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Service Price</label>
+              <input
+                className="dash-input"
+                type="number"
+                value={newService.price}
+                onChange={(e) => setNewService({ ...newService, price: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Duration</label>
+              <input
+                className="dash-input"
+                type="text"
+                value={newService.duration}
+                placeholder="Enter duration (e.g., 1h 30min)"
+                onChange={(e) => setNewService({ ...newService, duration: e.target.value })}
+                required
+              />
+            </div>
+            <button type="submit" className="add-service-btn">Add Service</button>
+          </form>
+        </div>
         )}
 
         {/* Settings Section */}

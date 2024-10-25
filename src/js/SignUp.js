@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from './firebase'; 
-import { collection, addDoc } from "firebase/firestore"
+import { auth } from '../firebase'; 
 import '../css/SignUp.css'; 
 
-const SignUp = ({ onSignUpSuccess }) => {
+const SignUp = ({ onSignUp, onSignInClick }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -13,38 +12,34 @@ const SignUp = ({ onSignUpSuccess }) => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await addDoc(collection(db, "users"), {
-        email: user.email,
-        mobileNumber: mobileNumber,
-        userType: "customer" // Set userType
-      });
+      await createUserWithEmailAndPassword(auth, email, password);
+      const user = auth.currentUser;
+      console.log(user);
 
       // Clear form and display success message
-      setEmail("");
-      setPassword("");
-      setMobileNumber("");
-      setSuccess("Account created successfully. You can now sign in.");
-      setError("");
+       setEmail("");
+       setPassword("");
+       setMobileNumber("");
+        setSuccess("Account created successfully. You can now sign in.");
+        setError("");
     } catch (error) {
       console.error("Error creating account: ", error);
-      setError("Error creating account. Please try again.");
-      setSuccess("");
+        setError("Error creating account. Please try again.");
+        setSuccess("");
     }
   };
 
   return (
-    <div> 
-      <h2>Customer Sign Up</h2>
+    <div className='SP'> 
+      <img className="imgSU" src="/dark-logo.png" alt="App Logo" />
+      <div className="signUp-container">
+      <h2 className="SU-header">Customer Sign Up</h2>
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
       <form onSubmit={handleSignUp}>
-        <div className="form-group">
-          <label>Email</label>
+        <div className="SIform-group">
+          <label className='SU-label'>Email</label>
           <input
             type="email"
             placeholder="Enter your email"
@@ -53,8 +48,8 @@ const SignUp = ({ onSignUpSuccess }) => {
             required
           />
         </div>
-        <div className="form-group">
-          <label>Password</label>
+        <div className="SIform-group">
+          <label className='SU-label'>Password</label>
           <input
             type="password"
             placeholder="Enter your password"
@@ -63,8 +58,8 @@ const SignUp = ({ onSignUpSuccess }) => {
             required
           />
         </div>
-        <div className="form-group">
-          <label>Mobile Number</label>
+        <div className="SIform-group">
+          <label className='SU-label'>Mobile Number</label>
           <input
             type="tel"
             placeholder="Enter your mobile number"
@@ -73,9 +68,14 @@ const SignUp = ({ onSignUpSuccess }) => {
             required
           />
         </div>
-        {error && <p className="error-text">{error}</p>}
-        <button type="submit" className="submit-btn">Sign Up</button>
+        <button type="submit" onClick={onSignUp} className="SU-sub submit-btn">Sign Up</button>
       </form>
+        <div className="SIform-group">
+          <p>Already have an account? Sign in instead:</p>
+          {/* Sign In button */}
+          <button className="reg-btn" onClick={onSignInClick}>Sign In</button>
+        </div>
+      </div>
     </div>
   );
 };

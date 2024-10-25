@@ -3,95 +3,90 @@
     display: flex;
   }
   
-  /* Sidebar styling */
-  .sidebar {
-    width: 200px;
-    background-color: #f4f4f4;
-    padding: 20px;
-    height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .sidebar h2 {
-    margin-bottom: 20px;
-  }
-  
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar ul li {
-    padding: 10px 0;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  
-  .sidebar ul li.active {
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  /* Main content styling */
-  .main-content {
-    padding: 20px;
-    width: 100%;
-  }
-  
-  .bookings-section, .services-section, .settings-section {
-    margin-top: 20px;
-  }
-  
-  /* Bookings list */
-  .booking-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .booking-list li {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-  }
-  
-  /* Service list */
-  .service-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .service-list li {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-  }
-  
-  /* Form for adding a new service */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-  
-  .add-service-btn {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .add-service-btn:hover {
-    background-color: #0056b3;
-  }
+/* Sidebar styling */
+.sidebar {
+  width: 200px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  height: 100vh;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 10px 0;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.sidebar ul li.active {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Main content styling */
+.main-content {
+  padding: 20px;
+  width: 100%;
+}
+
+.bookings-section, .services-section, .settings-section {
+  margin-top: 20px;
+}
+
+/* Bookings list */
+.booking-list {
+  list-style: none;
+  padding: 0;
+}
+
+.booking-list li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Service list */
+.service-list {
+  list-style: none;
+  padding: 0;
+}
+
+.service-list li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Form for adding a new service */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.dash-input {
+  padding: 1%;
+  width: 40%;
+  margin-left: 2%;
+}
+
+.add-service-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.add-service-btn:hover {
+  background-color: #0056b3;
+}

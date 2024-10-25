@@ -3,12 +3,12 @@
   "name": "SlotSage",
   "icons": [
     {
-      "src": "app-logo-white.png",
+      "src": "slotsage.png",
       "type": "image/png",
       "sizes": "64x64 32x32 24x24 16x16"
     },
     {
-      "src": "app-logo.png",
+      "src": "slotsage.png",
       "type": "image/png",
       "sizes": "192x192"
     }
