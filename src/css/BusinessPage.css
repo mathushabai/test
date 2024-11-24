@@ -1,0 +1,219 @@
+.business-page {
+    margin: 0 auto;
+    padding: 20px;
+    width: 1400px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.business-container {
+    background-color: white;
+    padding: 1% 4% 3% 4%;
+    border-radius: 45px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    text-align: center;
+    display: inline-grid;
+    margin-right: auto;
+}
+
+.side-container {
+    background-color: white;
+    border-radius: 40px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+    display: inline-grid;
+    text-align: center;
+    margin-left: 880px;
+    position: fixed;
+}
+
+.business-header h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #354F52;
+    margin-bottom: 30px;
+}
+
+.business-sub {
+    color: #354F52;
+    text-align: start;
+}
+
+.business-image {
+    width: 100%;
+    height: auto;
+    max-height: 600px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.business-desc {
+    margin-bottom: 50px;
+}
+
+.services-section {
+    margin-top: 30px;
+}
+
+.service-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.service-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.service-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 10px;
+}
+
+.service-name {
+    flex: 0.45 1;
+    text-align: start;
+    margin-left: 20px;
+    -webkit-text-stroke: 1px;
+}
+
+.service-duration {
+    flex: 0.35 1;
+    text-align: center;
+}
+
+.service-price {
+    flex: 0.35 1;
+    text-align: center;
+}
+
+.book-button {
+    flex: 0.25 1;
+    padding: 16px 2px;
+    background-color: #354F52;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-text-stroke: thin;
+    font-size: 1em;
+}
+
+.book-button:hover {
+    background-color: #072c11;
+}
+
+.about-section {
+    margin-top: 30px;
+}
+
+.map {
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-section ul {
+    margin-top: 25px;
+    list-style-type: none;
+    padding: 0;
+    text-align: start;
+}
+
+.days-list {
+    margin-bottom: 15px;
+}
+
+.info-section {
+    padding: 20px;
+    border-radius: 40px;
+    background-color: #ffffff;
+}
+
+.info-section h2 {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #2F4F4F;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #E0E0E0;
+    padding-bottom: 10px;
+}
+
+.dayText {
+    margin-bottom: 8px;
+    width: 100px;
+    -webkit-text-stroke: 0.8px;
+    letter-spacing: 0.8px;
+}
+
+.opening-hours-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 5px 2px; 
+    font-size: 1em;
+    color: #2F4F4F;
+    align-items: center;
+}
+
+.opening-hours-list li {
+    display: contents;
+    margin-bottom: 8px;
+}
+
+.opening-hours-list .day {
+    font-weight: bold;
+}
+
+.opening-hours-list .hours {
+    text-align: right;
+}
+
+.opening-hours-list .hours.closed {
+    color: #D9534F; 
+    font-weight: bold;
+}
+
+.contact-info {
+    margin-top: 30px;
+    -webkit-text-stroke: thin;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #2F4F4F;
+}
+
+.contact-icon {
+    margin-right: 8px;
+    color: #555;
+}
+
+.about-section .map {
+    width: 100%;
+    height: 300px;
+    background: #f0f0f0;
+}

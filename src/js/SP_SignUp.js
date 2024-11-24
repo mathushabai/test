@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import '../css/SP_SignUp.css';
 import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
@@ -9,15 +9,22 @@ import TimePickerModal from '../TimePickerModal';
 import "flatpickr/dist/themes/material_blue.css";
 import { useLoadScript } from '@react-google-maps/api';
 import { Autocomplete } from '@react-google-maps/api';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useNavigate } from 'react-router-dom';
+import { storage } from "../firebase"; 
+
 const libraries = ['places'];
 
-function SP_SignUp({ onSignInClick, onSPSignUp }) {
+function SP_SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [businessName, setBusinessName] = useState('');
+  const [businessImage, setBusinessImage] = useState(null);
+  const [businessLicense, setBusinessLicense] = useState(null);
+  const [businessLicenseUrl, setBusinessLicenseUrl] = useState(null);
   const [businessAddress, setBusinessAddress] = useState('');
   const [isRemote, setIsRemote] = useState(false);
   const [businessHours, setBusinessHours] = useState({
@@ -29,17 +36,17 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
     Saturday: { shifts: [] },
     Sunday: { shifts: [] },
   });
-  const [description, setDescription] = useState('');
-  const categories = ['Hair Services', 'Massage', 'Nails', 'Henna', 'Car Wash'];
+  const [businessDescription, setDescription] = useState('');
+  const categories = ['Hair Salon', 'Hair Removal', 'Spa & Wellness', 'Nail Services', 'Henna','Makeup', 'Eyebrows & Lashes', 'Car Wash', 'Electrician' , 'Pet Care', 'Photography'];
   const [customCategory, setCustomCategory] = useState('');
   const [customCategoryAdded, setCustomCategoryAdded] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [services, setServices] = useState([{ name: "", price: "", duration: "" }]);
+  const [services, setServices] = useState([{ name: "", price: "", totalDuration: 0 }]);
   const [error, setError] = useState('');
   const [currentDay, setCurrentDay] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const apiKey = 'AIzaSyB0QsIHJw6042khNA-aOoBHeCfDy-xQInY'; 
   const [autocomplete, setAutocomplete] = useState(null);
+  const navigate = useNavigate();
 
   const validatePassword = (password) => {
     const minLength = password.length >= 8;
@@ -89,22 +96,56 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
     }
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      setBusinessImage(e.target.files[0]);
+    }
+  };
+
+  const handleLicenseChange = (e) => {
+    if (e.target.files[0]) {
+      setBusinessLicense(e.target.files[0]);
+    }
+  };
+
+  const handleLicenseUpload = async () => {
+    if (!businessLicense) return;
+
+    const storageRef = ref(storage, `businessLicenses/${businessLicense.name}`);
+    
+    try {
+      // Upload the file and get the URL
+      const snapshot = await uploadBytes(storageRef, businessLicense);
+      const url = await getDownloadURL(snapshot.ref);
+      
+      // Store the URL in the state (or wherever needed)
+      setBusinessLicenseUrl(url);
+    } catch (error) {
+      console.error("Error uploading business license: ", error);
+    }
+  };
+
   // Google Maps API methods
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: apiKey,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
+    
+    options: {
+      types: ['address'],
+      componentRestrictions: { country: 'my' }  
+    }
   });
 
-  const onPlaceChanged = () => {
+  const onPlaceChanged = useCallback(() => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
       setBusinessAddress(place.formatted_address);
     }
-  };
+  }, [autocomplete]);
 
-  const onLoad = (autocompleteInstance) => {
+  const onLoad = useCallback((autocompleteInstance) => {
     setAutocomplete(autocompleteInstance);
-  };
+  }, []);
 
   const handleSaveTime = (day, shift) => {
     if (shift.closed) {
@@ -157,7 +198,7 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
       setCustomCategory('');
       setCustomCategoryAdded(true); 
       setTimeout(() => {
-        setCustomCategoryAdded(false); // Hide the message after a delay (e.g., 3 seconds)
+        setCustomCategoryAdded(false); // Hide the message after 3 seconds
       }, 3000);
     }
   };
@@ -184,14 +225,21 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
     }
   };
 
-  const handleServiceChange = (index, event) => {
-    const values = [...services];
-    values[index][event.target.name] = event.target.value;
-    setServices(values);
+  const handleServiceChange = (index, field, value) => {
+    const updatedServices = [...services];
+    if (field === "price") {
+      updatedServices[index][field] = parseFloat(value); 
+    } else if (field === "totalDuration") {
+      updatedServices[index][field] = parseInt(value, 10);
+    } else {
+      updatedServices[index][field] = value;
+    }
+
+    setServices(updatedServices);
   };
 
   const handleAddService = () => {
-    setServices([...services, { name: "", price: "", duration: "" }]);
+    setServices([...services, { name: "", price: "", totalDuration: 0 }]);
   };
 
   const handleRemoveService = (index) => {
@@ -204,14 +252,22 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
     e.preventDefault();
     setError('');
 
-    try {
+    // Upload the business license file and get its URL
+    await handleLicenseUpload();
 
+    try {
       console.log("Creating user...");
 
-      if (!email || !password || !confirmPw || !businessName || !mobileNumber || (!isRemote && !businessAddress) || services.some(service => !service.name || !service.price || !service.duration)) {
+      if (!email || !password || !confirmPw || !businessName || !mobileNumber || (!isRemote && !businessAddress)) {
         setError('Please fill in all the fields.');
         console.log("Validation failed. Missing required fields.");
+        setTimeout(() => {
+          setError('');
+        }, 3000);
 
+        return;
+      } else if (!businessImage) {
+        setError('Please select a business image.');
         setTimeout(() => {
           setError('');
         }, 3000);
@@ -219,10 +275,31 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
         return;
       }
 
+      // Upload image to Firebase Storage
+      const imageRef = ref(storage, `businessImages/${businessImage.name}`);
+      const snapshot = await uploadBytes(imageRef, businessImage);
+      const imageUrl = await getDownloadURL(snapshot.ref);
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       const uid = user.uid;
       console.log("User created with UID:", user.uid);
+
+      // Upload business image to Firebase Storage
+      let businessImageUrl = '';
+      if (businessImage) {
+        const storageRef = ref(storage, `businessImages/${businessImage.name}`);
+        const uploadTask = await uploadBytes(storageRef, businessImage);
+        businessImageUrl = await getDownloadURL(uploadTask.ref); 
+      }
+
+      let businessLicenseUrl = ""; // Declare with 'let' if you intend to reassign
+
+      if (businessLicense) {
+        const licenseRef = ref(storage, `businessLicenses/${businessLicense.name}`);
+        const licenseSnapshot = await uploadBytes(licenseRef, businessLicense);
+        businessLicenseUrl = await getDownloadURL(licenseSnapshot.ref); // Now it can be reassigned
+      }
 
       // Organize business hours into opening and closing hours
       const businessHrsDuo = Object.keys(businessHours).reduce((hours, day) => {
@@ -237,6 +314,13 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
 
         return hours;
       }, {});
+      
+      // Format services to ensure each service entry has `totalDuration` in minutes
+      const formattedServices = services.map(service => ({
+        name: service.name,
+        price: parseFloat(service.price),
+        totalDuration: parseInt(service.totalDuration, 10) || 0,
+      }));
 
       console.log("Saving user data to Firestore...");
       await setDoc(doc(db, 'serviceProviders', uid), {
@@ -246,13 +330,16 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
         businessAddress: isRemote ? 'Remote Services' : businessAddress,
         businessHours: businessHrsDuo,
         categories: selectedCategories,
-        description,
-        services,
+        businessDescription,
+        services: formattedServices,
+        businessImageUrl,
+        businessLicenseUrl,
+        accountStatus: 'pending',
         userType: 'service-provider',
       });
 
       console.log("Data saved to Firestore.");
-      onSPSignUp();
+      navigate("/dashboard");
 
     } catch (error) {
       console.error("Error signing up: ", error);
@@ -320,6 +407,18 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
               onChange={(e) => setBusinessName(e.target.value)}
               required
             />
+            <label className='Image-label'>Business Image</label>
+            <input 
+              type="file" 
+              onChange={handleFileChange} />
+          </div>
+          <div className="SPform-group">
+            <label className='License-label'>Business License</label>
+            <input 
+              type="file" 
+              onChange={handleLicenseChange} 
+              required
+            />
           </div>
           <div className="SPform-group">
           <label className="service-label">Service Location</label>
@@ -336,7 +435,14 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
           <div className="SPform-group">
           <label className='BA-label'>Business Address</label>
             {typeof google !== 'undefined' && (
-              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged} disabled={isRemote}>
+              <Autocomplete
+                onLoad={onLoad}
+                onPlaceChanged={onPlaceChanged}
+                options={{
+                  types: ['address'], 
+                  componentRestrictions: { country: 'my' }
+                }}
+              >
                 <input
                   type="text"
                   placeholder="Enter business address"
@@ -351,7 +457,7 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
             <label className='Desc-label'>Description (Optional)</label>
             <textarea
               placeholder="Describe your business"
-              value={description}
+              value={businessDescription}
               className="descriptionBox"
               onChange={(e) => setDescription(e.target.value)} 
             />
@@ -409,7 +515,7 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
               {customCategoryAdded && <div className="success-message">Custom category added successfully!</div>}
             </div>
             <div className="selected-categories">
-            <label className='BH-label'>Selected Categories:</label>
+            <label className='SC-label'>Selected Categories:</label>
               <ul>
                 {selectedCategories.map((category, index) => (
                   <li className="selected-cat-list" key={index}>
@@ -422,7 +528,9 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
               </ul>
             </div>
           </div>
-          <label className="SP-label">Services</label>
+          <div className="services-header">
+            <label className="SP-label">Services</label>
+          </div>
           {services.map((service, index) => (
             <div key={index} className="service-item">
               <div className="SPform-group">
@@ -433,7 +541,7 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
                   name="name"
                   placeholder="Enter service name"
                   value={service.name}
-                  onChange={(e) => handleServiceChange(index, e)}
+                  onChange={(e) => handleServiceChange(index, "name", e.target.value)}
                   required
                 />
               </div>
@@ -442,25 +550,32 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
                 <span className="currency">RM</span>
                 <input
                   className="service-input"
-                  type="text"
+                  type="number"
+                  step="0.01"
+                  min="0"
                   name="price"
                   placeholder="Enter price"
                   value={service.price}
-                  onChange={(e) => handleServiceChange(index, e)}
+                  onChange={(e) => handleServiceChange(index, "price", e.target.value)}
                   required
                 />
               </div>
               <div className="SPform-group">
-                <label className='Servicelbl'>Duration</label>
-                <input
-                  className="service-input"
-                  type="text"
-                  name="duration"
-                  placeholder="Enter duration (e.g., 1h 30min)"
-                  value={service.duration}
-                  onChange={(e) => handleServiceChange(index, e)}
-                  required
-                />
+                <label className="Servicelbl">Duration</label>
+                <select
+                  value={service.totalDuration || ""}
+                  onChange={(e) => handleServiceChange(index, "totalDuration", e.target.value)}
+                >
+                  <option value="">Select Duration</option>
+                  <option value="30">30 mins</option>
+                  <option value="60">1 hr</option>
+                  <option value="90">1 hr 30 mins</option>
+                  <option value="120">2 hrs</option>
+                  <option value="150">2 hrs 30 mins</option>
+                  <option value="180">3 hrs</option>
+                  <option value="210">3 hrs 30 mins</option>
+                  <option value="240">4 hrs</option>
+                </select>
               </div>
               <button type="button" onClick={() => handleRemoveService(index)} className="remove-btn">
                 <FontAwesomeIcon icon={faCircleMinus} />
@@ -486,11 +601,11 @@ function SP_SignUp({ onSignInClick, onSPSignUp }) {
 
         <div className="SI-group">
           <p className="signIn-text">Already have an account? Sign in instead:</p>
-          <button className="SPSI-btn" onClick={onSignInClick}>Sign In</button>
+          <button className="SPSI-btn" onClick={() => navigate("/signin")}>Sign In</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default SP_SignUp;
+export default React.memo(SP_SignUp);

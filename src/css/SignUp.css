@@ -6,25 +6,29 @@
 }
 
 .imgSU {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3%;
-  margin-bottom: 3%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 .signUp-container {
   background-color: white;
-  padding: 1% 1%;
+  padding: 20px 35px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
   text-align: center;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 30px auto;
+}
+
+.SU-pw {
+  width: 320px;
+  padding: 15px;
 }
 
 .SU-header {
@@ -47,11 +51,28 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #52796F;
+  background-color: #84A98C;
   color: white;
   margin-top: 5%;
 }
 
 .SU-sub:hover {
-  background-color: #304D30;
+  cursor: pointer;
+  background-color: #618f6a;
+}
+
+.pw-text {
+  margin: 10px 0 30px 30px;
+}
+
+.password-requirements {
+  text-align: left;
+  margin-left: 40px;
+  margin-bottom: 30px;
+}
+
+.SU-success {
+  color: #618f6a;
+  font-size: 0.9em;
+  -webkit-text-stroke: 0.6px;
 }

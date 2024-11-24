@@ -4,6 +4,12 @@
     height: 100vh;
 }
 
+.imgSU {
+    width: 100px;
+    height: 100px;
+    margin: 3% 47%;
+}
+
 /* Form Styling */
 .signIn-container {
     background-color: white;
@@ -34,13 +40,18 @@
     margin-left: 6%;
 }
 
+.signIn-container input {
+    font-size: 1.1em;
+    -webkit-text-stroke: 0.2px;
+}
+
 input {
     outline: none;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 4%;
     width: 80%;
-    font-size: medium;
+    font-size: 1.1em;
     margin-bottom: 2%;
 }
 
@@ -69,7 +80,7 @@ select {
 
 .SI-sub:hover { 
     cursor: pointer;
-    background-color: #304D30;
+    background-color: #618f6a;
 }
 
 .forgot-pw {

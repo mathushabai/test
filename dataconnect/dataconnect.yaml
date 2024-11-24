@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "slotsage"
+location: "asia-southeast1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "slotsage-db"
+      cloudSql:
+        instanceId: "slotsage-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]

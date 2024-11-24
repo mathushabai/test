@@ -1,0 +1,90 @@
+.admin-dashboard {
+    padding: 60px;
+    display: block;
+  }
+  
+.admin-sidebar {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+  
+.admin-sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+  
+.admin-sidebar .active {
+    background-color: #007bff;
+    color: #ffffff;
+}
+  
+.main-content {
+    flex-grow: 1;
+    width: 900px;
+    padding: 0;
+}
+  
+.provider-list {
+    display: flex;
+    flex-direction: column;
+}
+  
+.provider-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    width: 800px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+  
+.provider-card p {
+    margin: 5px 0;
+}
+  
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+  
+.action-buttons button {
+    padding: 5px 10px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+  
+.action-buttons button:first-child {
+    background-color: #28a745;
+}
+  
+.action-buttons button:last-child {
+    background-color: #dc3545;
+}
+
+.logout-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: auto;
+  }
+  
+  .logout-btn:hover {
+    background-color: #c9302c;
+  }
+  
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }

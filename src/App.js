@@ -6,15 +6,21 @@ import { doc, getDoc } from "firebase/firestore";
 import './App.css';
 
 import CustHome from './js/CustHome';
-import ServiceList from './js/ServiceList';
 import Dashboard from './js/Dashboard';
 import SignIn from './SignIn';
+import ForgotPassword from './js/ForgotPassword';
 import SignUp from './js/SignUp';
 import SP_SignUp from './js/SP_SignUp';
+import LoadingPage from './js/LoadingPage';
+import BusinessPage from './js/BusinessPage';
+import BookingPage from './js/BookingPage';
+import ProfilePage from './js/ProfilePage';
+import AdminDash from './js/AdminDash';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -22,83 +28,93 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setIsAuthenticated(true);
-
-        const SPref = doc(db, "serviceProviders", user.uid);
-        const SPsnap = await getDoc(SPref);
-
-        if (SPsnap.exists()) {
-          setUserType('service-provider');
-          navigate("/dashboard");
-        } else {
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            setUserType('customer');
-            navigate("/home");
-          } else {
-            console.log("User does not have a role.");
-            setUserType(null); 
-          }
-        }
+        const userType = await fetchUserType(user.uid);
+        setUserId(user.uid);
+        setUserType(userType);
+        setLoading(false); 
       } else {
         setIsAuthenticated(false);
         setUserType(null);
+        setLoading(false);
       }
-      setLoading(false); 
     });
 
-    return () => unsubscribe(); 
-  }, [navigate]);
+    return () => unsubscribe();
+  }, []);
 
-  const handleSignInClick = () => {
-    navigate("/signin");
-  };
-
-  const handleSignUpSuccess = () => {
-    navigate("/home");
-  };
-
-  const handleSPSignUp = () => {
-    navigate("/dashboard");
-  };
-
-  const handleSignUpClick = (signUpType) => {
-    if (signUpType === 'customerSignUp') {
-      navigate('/signup');
-    } else if (signUpType === 'SPSignUp') {
-      navigate('/SPSignup');
+  const fetchUserType = async (uid) => {
+    try {
+      // Check if the user is an admin
+      const adminRef = doc(db, "admins", uid);
+      const adminSnap = await getDoc(adminRef);
+      if (adminSnap.exists()) return 'admin';
+  
+      // Check if the user is a service provider
+      const SPref = doc(db, "serviceProviders", uid);
+      const SPsnap = await getDoc(SPref);
+      if (SPsnap.exists()) return 'service-provider';
+  
+      // Check if the user is a customer
+      const userRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) return 'customer';
+  
+      // If no role is found
+      return null;
+    } catch (error) {
+      console.error("Error fetching user type:", error);
+      return null;
     }
   };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/signin"); 
+      setIsAuthenticated(false);
+      setUserType(null);
+      navigate("/signin", { replace: true });
     } catch (error) {
       console.error("Error logging out: ", error);
     }
   };
 
   if (loading) {
-    return <p>Loading user info...</p>; // Show loading message while fetching userType
+    return <LoadingPage />;
   }
 
   return (
     <Routes>
-      <Route path="/" element={isAuthenticated ? (userType === 'service-provider' ? <Navigate to="/dashboard" /> : <Navigate to="/home" />) : <Navigate to="/signin" />} />
-      <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} onSignUpClick={handleSignUpClick} />} />
-      <Route path="/signup" element={<SignUp onSignInClick={handleSignInClick} onSignUp={handleSignUpSuccess} />} />
-      <Route path="/SPSignUp" element={<SP_SignUp onSignInClick={handleSignInClick} onSPSignUp={handleSPSignUp} />} />
-      {isAuthenticated && (
-        <>
-          <Route path="/home" element={<CustHome />} />
-          <Route path="/services" element={<ServiceList />} />
-          <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
-        </>
-      )}
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? (
+            <Navigate 
+              to={
+                userType === 'admin' 
+                  ? "/admin" 
+                  : userType === 'service-provider' 
+                  ? "/dashboard" 
+                  : "/home"
+              } 
+              replace 
+            />
+          ) : (
+            <Navigate to="/signin" replace />
+          )
+        }
+      />
+      <Route path="/admin" element={<AdminDash />} />
+      <Route path="/home" element={<CustHome onLogout={handleLogout} />} />
+      <Route path="/business/:businessId" element={<BusinessPage onLogout={handleLogout} />} />
+      <Route path="/book/:businessId" element={<BookingPage onLogout={handleLogout} />} />
+      <Route path="/profile" element={<ProfilePage userId={userId} onLogout={handleLogout} />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/SPSignUp" element={<SP_SignUp />} />
+      <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
-  );  
+  );
 }
 
 export default App;
